@@ -1,0 +1,23 @@
+{
+  "name": "artg-2260-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "6.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iwolterstorff/artg-2260-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iwolterstorff/artg-2260-game/issues"
+  },
+  "homepage": "https://github.com/iwolterstorff/artg-2260-game#readme"
+}
