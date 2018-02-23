@@ -81,9 +81,8 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        users.filter((user) => {
-            return user.id !== currentPlayer.id;
-        });
+        if (findIndex(users, currentPlayer.id) > -1)
+            users.splice(findIndex(users, currentPlayer.id), 1);
         console.log("Client disconnected");
     });
 
@@ -101,6 +100,19 @@ setInterval(gameLoop, 1000 / FRAMERATE);
 http.listen(PORT, () => {
     console.log(`Server started on ${ PORT }`);
 });
+
+// From https://github.com/huytd/agar.io-clone/blob/master/src/server/lib/util.js
+function findIndex(arr, id) {
+    var len = arr.length;
+
+    while (len--) {
+        if (arr[len].id === id) {
+            return len;
+        }
+    }
+
+    return -1;
+}
 
 class Velocity {
     // spd is units(pixels)/tick
