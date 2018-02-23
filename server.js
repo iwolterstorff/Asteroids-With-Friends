@@ -33,10 +33,10 @@ function gameLoop() {
 
 function movePlayer(player) {
     if (player.dirKeys.left) {
-        player.x += SHIP_SPEED;
+        player.x -= SHIP_SPEED;
     }
     if (player.dirKeys.right) {
-        player.x -= SHIP_SPEED;
+        player.x += SHIP_SPEED;
     }
     if (player.dirKeys.up) {
         player.y -= SHIP_SPEED;
