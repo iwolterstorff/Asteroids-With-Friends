@@ -81,8 +81,12 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+        users.filter((user) => {
+            return user.id !== currentPlayer.id;
+        });
         console.log("Client disconnected");
     });
+
     socket.on('mouse', (data) => {
         console.log("Received: 'mouse' " + data.x + " " + data.y);
         socket.broadcast.emit('mouse', data);
