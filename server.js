@@ -22,7 +22,8 @@ function gameLoop() {
 
         sockets[users[i].id].emit('serverTellPlayerMove', {
             x: users[i].x,
-            y: users[i].y
+            y: users[i].y,
+            ang: users[i].lineAngle
         });
 
         sockets[users[i].id].emit('updateOtherPlayers', users.filter((thisUser) => {
@@ -68,15 +69,19 @@ io.sockets.on('connection', (socket) => {
             up: false,
             down: false
         },
+        lineAngle: 0,
         vel: new Velocity(0, 0)
     };
 
     users.push(currentPlayer);
 
-    socket.on('movePlayer', (dirKeys) => {
+    socket.on('movePlayer', (data) => {
         // Only update keys pressed if different than last values
-        if (currentPlayer.dirKeys !== dirKeys) {
-            currentPlayer.dirKeys = dirKeys;
+        if (currentPlayer.dirKeys !== data.keys) {
+            currentPlayer.dirKeys = data.keys;
+        }
+        if (currentPlayer.lineAngle !== data.angle) {
+            currentPlayer.lineAngle = data.angle;
         }
     });
 

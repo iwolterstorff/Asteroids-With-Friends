@@ -27,5 +27,8 @@
     "socket.io": "^2.0.4",
     "utf-8-validate": "4.0.0",
     "ws": "4.0.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
   }
 }

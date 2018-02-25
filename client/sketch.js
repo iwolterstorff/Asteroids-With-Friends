@@ -22,6 +22,7 @@ var currentPlayer = {
         up: false,
         down: false
     },
+    lineAngle: 0
     // vel: new Velocity(0, 0)
 };
 
@@ -48,6 +49,8 @@ function setup() {
         // ellipse(loc.x, loc.y, 80, 80);
         currentPlayer.x = loc.x;
         currentPlayer.y = loc.y;
+        currentPlayer.lineAngle = loc.lineAngle;
+        // console.log(currentPlayer.lineAngle);
     });
 
     socket.on('updateOtherPlayers', (data) => {
@@ -61,7 +64,13 @@ function draw() {
     dirKeys = new Keys();
 
     ellipse(currentPlayer.x, currentPlayer.y, 80, 80);
-    console.log(currentPlayer.x + ", " + currentPlayer.y);
+    // TODO: Finish turret drawing logic
+    line(currentPlayer.x, currentPlayer.y,
+        40 * Math.cos(currentPlayer.lineAngle),
+        40 * Math.sin(currentPlayer.lineAngle));
+    // console.log(currentPlayer.x + ", " + currentPlayer.y);
+    console.log(40 * Math.cos(currentPlayer.lineAngle));
+    console.log(40 * Math.sin(currentPlayer.lineAngle));
 
 
     if (keyIsDown(LEFT_ARROW)) {
@@ -77,7 +86,17 @@ function draw() {
         dirKeys.down = true;
     }
 
-    socket.emit('movePlayer', dirKeys);
+    // https://stackoverflow.com/questions/2676719/calculating-the-angle-between-the-line-defined-by-two-points
+    var lineDeltax = mouseX - currentPlayer.x;
+    var lineDeltay = currentPlayer.y - mouseY;
+    // console.log(lineDeltay);
+    var angle = Math.atan2(lineDeltay, lineDeltax);
+    // console.log(angle);
+
+    socket.emit('movePlayer', {
+        keys: dirKeys,
+        angle: angle
+    });
 
     drawOtherPlayers();
 }
