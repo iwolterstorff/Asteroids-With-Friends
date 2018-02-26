@@ -1,0 +1,3 @@
+[submodule "client/p5.play"]
+	path = client/p5.play
+	url = https://github.com/molleindustria/p5.play.git
