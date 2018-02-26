@@ -1,5 +1,5 @@
 {
-  "name": "AsteroidsWithFriends",
+  "name": "Asteroids-With-Friends",
   "version": "1.0.0",
   "description": "A multiplayer browser game inspired by Asteroids",
   "main": "index.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iwolterstorff/AsteroidsWithFriends.git"
+    "url": "git+https://github.com/iwolterstorff/Asteroids-With-Friends.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/iwolterstorff/AsteroidsWithFriends/issues"
+    "url": "https://github.com/iwolterstorff/Asteroids-With-Friends/issues"
   },
-  "homepage": "https://github.com/iwolterstorff/AsteroidsWithFriends#readme",
+  "homepage": "https://github.com/iwolterstorff/Asteroids-With-Friends#readme",
   "dependencies": {
     "bufferutil": "3.0.3",
     "express": "^4.16.2",
