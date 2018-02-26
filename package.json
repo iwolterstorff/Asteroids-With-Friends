@@ -1,7 +1,7 @@
 {
-  "name": "artg-2260-game",
+  "name": "AsteroidsWithFriends",
   "version": "1.0.0",
-  "description": "",
+  "description": "A multiplayer browser game inspired by Asteroids",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iwolterstorff/artg-2260-game.git"
+    "url": "git+https://github.com/iwolterstorff/AsteroidsWithFriends.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/iwolterstorff/artg-2260-game/issues"
+    "url": "https://github.com/iwolterstorff/AsteroidsWithFriends/issues"
   },
-  "homepage": "https://github.com/iwolterstorff/artg-2260-game#readme",
+  "homepage": "https://github.com/iwolterstorff/AsteroidsWithFriends#readme",
   "dependencies": {
     "bufferutil": "3.0.3",
     "express": "^4.16.2",
