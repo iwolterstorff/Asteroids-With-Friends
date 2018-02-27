@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node src/server/server.js"
   },
   "engines": {
-    "node": "6.2.0"
+    "node": "8.9.4"
   },
   "repository": {
     "type": "git",
@@ -23,12 +23,14 @@
   "dependencies": {
     "bufferutil": "3.0.3",
     "express": "^4.16.2",
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.1.0",
+    "gulp-todo": "^5.4.0",
+    "jshint": "^2.9.5",
+    "jshint-stylish": "^2.2.1",
     "p5": "^0.6.0",
     "socket.io": "^2.0.4",
     "utf-8-validate": "4.0.0",
     "ws": "4.0.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1"
   }
 }
