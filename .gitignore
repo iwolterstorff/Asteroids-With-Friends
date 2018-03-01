@@ -111,4 +111,6 @@ fabric.properties
 # Ignore entire .idea repository
 .idea
 
-bin
+dist
+
+.gulp-cache

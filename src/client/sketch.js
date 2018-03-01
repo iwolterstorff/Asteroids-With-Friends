@@ -104,7 +104,7 @@ function draw() {
 function drawOtherPlayers() {
     for (var i = 0; i < otherPlayers.length; i++) {
         ellipse(otherPlayers[i].x, otherPlayers[i].y, 80, 80);
-    };
+    }
 }
 
 // function mouseDragged() {

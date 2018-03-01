@@ -10,7 +10,7 @@ var path = require('path');
 var io = require('socket.io')(http);
 
 
-app.use(express.static(path.join(__dirname, "client")));
+app.use(express.static(path.join(__dirname, "../client")));
 
 var users = [];
 
