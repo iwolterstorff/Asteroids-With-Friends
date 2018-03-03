@@ -39,7 +39,7 @@ gulp.task('build-client', ['move-client-assets'], () => {
 });
 
 gulp.task('move-client-assets', () => {
-    return gulp.src(['src/client/**/*.*', '!src/client/**/*.js'])
+    return gulp.src(['src/client/**/*.*', '!src/client/*.js'])
         .pipe(gulp.dest('./dist/client'));
 });
 
