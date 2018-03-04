@@ -34,9 +34,12 @@ client.socket.on('newPlayer', (data) => {
 });
 
 client.socket.on('allPlayers', (data) => {
-   for (let playerIndex = 0; playerIndex < data.length; playerIndex += 1) {
-       world.updatePlayer(data[playerIndex]);
-   }
+   // for (let playerIndex = 0; playerIndex < data.length; playerIndex += 1) {
+   //     world.updatePlayer(data[playerIndex]);
+   // }
+    data.forEach((player, index, array) => {
+        world.updatePlayer(player);
+    });
 
 
    client.socket.on('remove', (data) => {
