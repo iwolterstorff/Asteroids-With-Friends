@@ -42,7 +42,7 @@ client.socket.on('allPlayers', (data) => {
     });
 
 
-   client.socket.on('remove', (data) => {
-       world.removePlayer(data.id);
+   client.socket.on('remove', (id) => {
+       world.removePlayer(id);
    });
 });

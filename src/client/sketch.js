@@ -15,9 +15,11 @@ world.updatePlayer = (playerData) => {
     if (playerData.id !== undefined) {
         world.players[playerData.id] = playerData;
     }
+    // console.log(world.players);
 };
 
 world.removePlayer = (id) => {
+    console.log(`Player removed: ${id}`);
     delete world.players[id];
 };
 
@@ -36,9 +38,7 @@ function draw() {
 
 
     for (let p in allPlayers) {
-        // console.log(player);
         if (allPlayers.hasOwnProperty(p)) {
-            // console.log(player.x);
             fill(255);
             ellipse(allPlayers[p].x, allPlayers[p].y, 80, 80);
         }

@@ -58,8 +58,7 @@ io.sockets.on('connection', (socket) => {
     socket.on('playerShoot', () => {
         // TODO: Figure out wth goes in here
     });
-
-    // TODO: Make players actually disappear
+    
     socket.on('disconnect', () => {
         console.log(`Player disconnected: ${socket.player.id}`);
         io.emit('remove', socket.player.id);
