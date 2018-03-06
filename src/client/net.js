@@ -10,14 +10,13 @@ client.addThisPlayer = () => {
     client.socket.emit('newPlayer');
 };
 
-// dir is one of: ['up', 'down', 'left', 'right']
-client.sendMovement = (dir) => {
-    client.socket.emit('playerMove', dir);
+client.sendMovement = (dirs) => {
+    client.socket.emit('playerMove', dirs);
 };
 
 // angle is in RADIANS
 client.sendGunAngle = (angle) => {
-    client.socket.emit('playerMoveGun', {angle: angle});
+    client.socket.emit('playerMoveGun', angle);
 };
 
 client.shoot = () => {

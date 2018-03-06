@@ -1,4 +1,5 @@
 {
   "width": 1500,
-  "height": 700
+  "height": 700,
+  "defaultRadius": 40
 }

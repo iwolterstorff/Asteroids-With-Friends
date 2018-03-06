@@ -1,21 +1,37 @@
-// A Player contains the following fields: {x, y, angle}
+// A Player contains the following fields: {x, y, radius, angle}
 
-// let config = require('../../config.json');
+
+let config;
 // These will be hard-coded on clientside until i find a good way to import them from config.json
-const WIDTH = 1500;
-const HEIGHT = 700;
+let WIDTH = 1500;
+let HEIGHT = 700;
+let DEFRADIUS = 40;
+
+let Dirs = class Dirs {
+    constructor() {
+        this.up = false;
+        this.down = false;
+        this.left = false;
+        this.right = false;
+    }
+};
+
+let keys;
+
+let currentDirs;
 
 
 let world = {
     players: {}
 };
 
+let player;
+
 
 world.updatePlayer = (playerData) => {
     if (playerData.id !== undefined) {
         world.players[playerData.id] = playerData;
     }
-    // console.log(world.players);
 };
 
 world.removePlayer = (id) => {
@@ -23,12 +39,36 @@ world.removePlayer = (id) => {
     delete world.players[id];
 };
 
+// function preload() {
+//     config = loadJSON("../../config.json");
+//     WIDTH = config.width;
+//     HEIGHT = config.height;
+//     DEFRADIUS = config.defaultRadius;
+// }
+
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
     background(0);
 
     client.addThisPlayer();
+
+    currentDirs = new Dirs();
+
+    keys = {
+        up: [UP_ARROW, 87],
+        down: [DOWN_ARROW, 83],
+        left: [LEFT_ARROW, 65],
+        right: [RIGHT_ARROW, 68]
+    };
+
+    player = {
+        id: client.socket.id,
+        x: WIDTH / 2,
+        y: HEIGHT / 2,
+        radius: DEFRADIUS,
+        angle: 0
+    };
 }
 
 function draw() {
@@ -36,29 +76,38 @@ function draw() {
     let allPlayers = world.players;
 
 
-
     for (let p in allPlayers) {
         if (allPlayers.hasOwnProperty(p)) {
             fill(255);
-            ellipse(allPlayers[p].x, allPlayers[p].y, 80, 80);
+            let aPlayer = allPlayers[p];
+            ellipse(aPlayer.x, aPlayer.y, aPlayer.radius * 2, aPlayer.radius * 2);
+            push();
+            translate(aPlayer.x, aPlayer.y);
+            rotate(aPlayer.angle);
+            line(0, 0, aPlayer.radius, 0);
+            pop();
+            if (aPlayer.id === player.id) {
+                player = aPlayer;
+            }
         }
     }
 
-
-
-    if (keyIsDown(LEFT_ARROW)) {
-        client.sendMovement('left');
-    }
-    if (keyIsDown(RIGHT_ARROW)) {
-        client.sendMovement('right');
-        // console.log('right');
-    }
-    if (keyIsDown(UP_ARROW)) {
-        client.sendMovement('up');
-    }
-    if (keyIsDown(DOWN_ARROW)) {
-        client.sendMovement('down');
+    for (let dir in keys) {
+        if (keys.hasOwnProperty(dir)) {
+            keys[dir].forEach((key) => {
+                if (keyIsDown(key)) {
+                    currentDirs[dir] = true;
+                }
+            });
+        }
     }
 
+    client.sendMovement(currentDirs);
+    currentDirs = new Dirs();
+
+    // Update turret angle
+    // I learned this from https://stackoverflow.com/questions/2676719/calculating-the-angle-between-the-line-defined-by-two-points
+    let angle = atan2(mouseY - player.y, mouseX - player.x);
+    client.sendGunAngle(angle);
 
 }

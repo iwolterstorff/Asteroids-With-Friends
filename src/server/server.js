@@ -10,12 +10,17 @@ const PORT = process.env.PORT || 3000;
 
 const WIDTH = config.width || 1500;
 const HEIGHT = config.height || 700;
+const DEFRADIUS = config.defaultRadius || 40;
 
 const FRAMERATE = 60;
 const SHIP_SPEED = 5;
 
 
 app.use(express.static(path.join(__dirname, "../client")));
+
+app.get('/config.json', (req, res) => {
+    res.sendFile(path.join(__dirname, "../../config.json"));
+});
 
 io.sockets.on('connection', (socket) => {
     console.log(`Socket connected: ${socket.id}`);
@@ -26,25 +31,25 @@ io.sockets.on('connection', (socket) => {
             id: socket.id,
             x: WIDTH / 2,
             y: HEIGHT / 2,
+            radius: DEFRADIUS,
             angle: 0
         };
         socket.emit('allPlayers', getAllPlayers());
         socket.broadcast.emit('newPlayer', socket.player);
     });
 
-    // data is one of: 'up', 'down', 'left', 'right'
     socket.on('playerMove', (data) => {
         // TODO: Implement space-y movement
-        if (data === 'up') {
+        if (data.up) {
             socket.player.y -= SHIP_SPEED;
         }
-        if (data === 'down') {
+        if (data.down) {
             socket.player.y += SHIP_SPEED;
         }
-        if (data === 'left') {
+        if (data.left) {
             socket.player.x -= SHIP_SPEED;
         }
-        if (data === 'right') {
+        if (data.right) {
             socket.player.x += SHIP_SPEED;
             // console.log('right');
         }
@@ -58,7 +63,7 @@ io.sockets.on('connection', (socket) => {
     socket.on('playerShoot', () => {
         // TODO: Figure out wth goes in here
     });
-    
+
     socket.on('disconnect', () => {
         console.log(`Player disconnected: ${socket.player.id}`);
         io.emit('remove', socket.player.id);
