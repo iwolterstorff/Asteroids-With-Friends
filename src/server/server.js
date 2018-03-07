@@ -11,9 +11,20 @@ const PORT = process.env.PORT || 3000;
 const WIDTH = config.width || 1500;
 const HEIGHT = config.height || 700;
 const DEFRADIUS = config.defaultRadius || 40;
+const DEFVEL = config.defaultMissileVelocity || 3;
 
 const FRAMERATE = 60;
 const SHIP_SPEED = 5;
+
+// I intend to add more functionality to this class over time
+let Missile = class Missile {
+    constructor(x, y, vel, angle) {
+        this.x = x;
+        this.y = y;
+        this.vel = vel;
+        this.angle = angle;
+    }
+};
 
 
 app.use(express.static(path.join(__dirname, "../client")));
@@ -32,7 +43,8 @@ io.sockets.on('connection', (socket) => {
             x: WIDTH / 2,
             y: HEIGHT / 2,
             radius: DEFRADIUS,
-            angle: 0
+            angle: 0,
+            missiles: []
         };
         socket.emit('allPlayers', getAllPlayers());
         socket.broadcast.emit('newPlayer', socket.player);
@@ -61,7 +73,7 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('playerShoot', () => {
-        // TODO: Figure out wth goes in here
+        socket.player.missiles.push(new Missile(socket.player.x, socket.player.y, DEFVEL, socket.player.angle));
     });
 
     socket.on('disconnect', () => {

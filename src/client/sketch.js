@@ -1,4 +1,4 @@
-// A Player contains the following fields: {x, y, radius, angle}
+// A Player contains the following fields: {id, x, y, radius, angle, missiles(array of Missile)}
 
 
 let config;
@@ -6,6 +6,7 @@ let config;
 let WIDTH = 1500;
 let HEIGHT = 700;
 let DEFRADIUS = 40;
+
 
 let Dirs = class Dirs {
     constructor() {
@@ -67,7 +68,8 @@ function setup() {
         x: WIDTH / 2,
         y: HEIGHT / 2,
         radius: DEFRADIUS,
-        angle: 0
+        angle: 0,
+        missiles: []
     };
 }
 
@@ -75,7 +77,7 @@ function draw() {
     background(0);
     let allPlayers = world.players;
 
-
+    // Render spaceships with turrets
     for (let p in allPlayers) {
         if (allPlayers.hasOwnProperty(p)) {
             fill(255);
@@ -92,6 +94,7 @@ function draw() {
         }
     }
 
+    // Set movement directions
     for (let dir in keys) {
         if (keys.hasOwnProperty(dir)) {
             keys[dir].forEach((key) => {
@@ -102,6 +105,16 @@ function draw() {
         }
     }
 
+    player.missiles.forEach((item, index, array) => {
+        push();
+        translate(item.x, item.y);
+        rotate(item.angle + (PI / 2));
+        fill(192, 192, 192);
+        triangle(-10, 30, 10, 30, 0, 0);
+        pop();
+    });
+
+    // Send and reset movement directions
     client.sendMovement(currentDirs);
     currentDirs = new Dirs();
 
@@ -110,4 +123,8 @@ function draw() {
     let angle = atan2(mouseY - player.y, mouseX - player.x);
     client.sendGunAngle(angle);
 
+}
+
+function mousePressed() {
+    client.shoot();
 }

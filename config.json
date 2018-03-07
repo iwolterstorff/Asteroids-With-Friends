@@ -1,5 +1,6 @@
 {
   "width": 1500,
   "height": 700,
-  "defaultRadius": 40
+  "defaultRadius": 40,
+  "defaultMissileVelocity": 3
 }
