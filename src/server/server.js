@@ -81,24 +81,30 @@ io.sockets.on('connection', (socket) => {
     });
 
     setInterval(() => {
-        if (socket.player.missiles instanceof Array) {
-            socket.player.missiles.forEach((item, index, array) => {
-                item.x += item.vel * Math.cos(item.angle);
-                item.y += item.vel * Math.sin(item.angle);
-            });
-        }
+        missileTick(socket.player);
         socket.emit('allPlayers', getAllPlayers());
     }, 1000 / FRAMERATE);
 
 
 });
 
-// function missileTick(player) {
-//     player.missiles.forEach((item) => {
-//         item.x += Math.cos(item.angle);
-//         item.y += Math.sin(item.angle);
-//     });
-// }
+function missileTick(player) {
+    if (player.missiles instanceof Array) {
+        player.missiles.forEach((item, index, array) => {
+            item.x += item.vel * Math.cos(item.angle);
+            item.y += item.vel * Math.sin(item.angle);
+
+            // getAllPlayers().forEach((item, index, array) => {
+            //    if (item.x <= )
+            // });
+
+            // Delete missiles that leave the game borders
+            if (item.x > WIDTH + 50 || item.x < 0 - 50 || item.y > HEIGHT + 50 || item.y < 0 - 50) {
+                array.splice(index, 1);
+            }
+        });
+    }
+}
 
 
 // from https://github.com/Jerenaux/basic-mmo-phaser/blob/master/server.js
