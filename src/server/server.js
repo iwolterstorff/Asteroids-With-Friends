@@ -81,11 +81,24 @@ io.sockets.on('connection', (socket) => {
     });
 
     setInterval(() => {
+        if (socket.player.missiles instanceof Array) {
+            socket.player.missiles.forEach((item, index, array) => {
+                item.x += item.vel * Math.cos(item.angle);
+                item.y += item.vel * Math.sin(item.angle);
+            });
+        }
         socket.emit('allPlayers', getAllPlayers());
     }, 1000 / FRAMERATE);
 
 
 });
+
+// function missileTick(player) {
+//     player.missiles.forEach((item) => {
+//         item.x += Math.cos(item.angle);
+//         item.y += Math.sin(item.angle);
+//     });
+// }
 
 
 // from https://github.com/Jerenaux/basic-mmo-phaser/blob/master/server.js

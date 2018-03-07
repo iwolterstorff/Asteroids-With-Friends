@@ -88,7 +88,7 @@ function draw() {
             rotate(aPlayer.angle);
             line(0, 0, aPlayer.radius, 0);
             pop();
-            
+
             // Render missiles
             aPlayer.missiles.forEach((item, index, array) => {
                 push();
