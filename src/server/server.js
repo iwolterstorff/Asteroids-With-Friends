@@ -26,7 +26,6 @@ let Missile = class Missile {
     }
 };
 
-
 app.use(express.static(path.join(__dirname, "../client")));
 
 app.get('/config.json', (req, res) => {

@@ -88,6 +88,17 @@ function draw() {
             rotate(aPlayer.angle);
             line(0, 0, aPlayer.radius, 0);
             pop();
+            
+            // Render missiles
+            aPlayer.missiles.forEach((item, index, array) => {
+                push();
+                translate(item.x, item.y);
+                rotate(item.angle + (PI / 2));
+                fill(192, 192, 192);
+                triangle(-10, 30, 10, 30, 0, 0);
+                pop();
+            });
+
             if (aPlayer.id === player.id) {
                 player = aPlayer;
             }
@@ -104,15 +115,6 @@ function draw() {
             });
         }
     }
-
-    player.missiles.forEach((item, index, array) => {
-        push();
-        translate(item.x, item.y);
-        rotate(item.angle + (PI / 2));
-        fill(192, 192, 192);
-        triangle(-10, 30, 10, 30, 0, 0);
-        pop();
-    });
 
     // Send and reset movement directions
     client.sendMovement(currentDirs);
