@@ -43,7 +43,8 @@ io.sockets.on('connection', (socket) => {
             y: HEIGHT / 2,
             radius: DEFRADIUS,
             angle: 0,
-            missiles: []
+            missiles: [],
+            health: 100
         };
         socket.emit('allPlayers', getAllPlayers());
         socket.broadcast.emit('newPlayer', socket.player);
@@ -90,20 +91,29 @@ io.sockets.on('connection', (socket) => {
 
 function missileTick(player) {
     if (player.missiles instanceof Array) {
-        player.missiles.forEach((item, index, array) => {
-            item.x += item.vel * Math.cos(item.angle);
-            item.y += item.vel * Math.sin(item.angle);
+        player.missiles.forEach((miss, missIndex, missArray) => {
+            miss.x += miss.vel * Math.cos(miss.angle);
+            miss.y += miss.vel * Math.sin(miss.angle);
 
-            // getAllPlayers().forEach((item, index, array) => {
-            //    if (item.x <= )
-            // });
+            getAllPlayers().forEach((arrPlayer, playerIndex, playerArray) => {
+                if (arrPlayer !== player) {
+                    if (distance(miss.x, miss.y, arrPlayer.x, arrPlayer.y) <= arrPlayer.radius) {
+                        // TODO: MAKE THE MISSILE BLOW UPPPPP
+                        missArray.splice(missIndex, 1);
+                    }
+                }
+            });
 
             // Delete missiles that leave the game borders
-            if (item.x > WIDTH + 50 || item.x < 0 - 50 || item.y > HEIGHT + 50 || item.y < 0 - 50) {
-                array.splice(index, 1);
+            if (miss.x > WIDTH + 50 || miss.x < 0 - 50 || miss.y > HEIGHT + 50 || miss.y < 0 - 50) {
+                missArray.splice(missIndex, 1);
             }
         });
     }
+}
+
+function distance(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
 

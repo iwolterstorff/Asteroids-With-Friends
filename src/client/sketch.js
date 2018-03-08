@@ -69,7 +69,8 @@ function setup() {
         y: HEIGHT / 2,
         radius: DEFRADIUS,
         angle: 0,
-        missiles: []
+        missiles: [],
+        health: 100
     };
 }
 
@@ -82,11 +83,26 @@ function draw() {
         if (allPlayers.hasOwnProperty(p)) {
             fill(255);
             let aPlayer = allPlayers[p];
-            ellipse(aPlayer.x, aPlayer.y, aPlayer.radius * 2, aPlayer.radius * 2);
             push();
             translate(aPlayer.x, aPlayer.y);
+            ellipse(0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+
+            // Draw health bar
+            push();
+            strokeWeight(4);
+            stroke(240, 0, 1);
+            line(-aPlayer.radius, aPlayer.radius + 5, aPlayer.radius, aPlayer.radius + 5);
+
+            stroke(34, 255, 0);
+            line(-aPlayer.radius, aPlayer.radius + 5, map(aPlayer.health, 0, 100, -aPlayer.radius, aPlayer.radius), aPlayer.radius + 5);
+            pop();
+
+            push();
             rotate(aPlayer.angle);
             line(0, 0, aPlayer.radius, 0);
+            pop();
+
+            // Pop the matrix transformation
             pop();
 
             // Render missiles
