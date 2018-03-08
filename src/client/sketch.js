@@ -26,7 +26,10 @@ let world = {
     players: {}
 };
 
-let player;
+let player, canvas, inputMessage, inputBox, inputButton;
+
+let name;
+
 
 
 world.updatePlayer = (playerData) => {
@@ -47,14 +50,37 @@ world.removePlayer = (id) => {
 //     DEFRADIUS = config.defaultRadius;
 // }
 
+function submitInput() {
+    name = inputBox.value();
+    player.name = name;
+    inputMessage.hide();
+    inputBox.hide();
+    inputButton.hide();
+    client.addThisPlayer();
+    canvas.show();
+}
+
+function resetInput() {
+    inputBox.value('');
+    inputMessage.show();
+    inputBox.show();
+    inputButton.show();
+    canvas.hide();
+}
 
 function setup() {
-    createCanvas(WIDTH, HEIGHT);
+    canvas = createCanvas(WIDTH, HEIGHT);
     background(0);
+    // canvas.hide();
 
-    client.addThisPlayer();
+    // inputMessage = createElement('h2', 'What\'s your name?');
+    // inputBox = createInput('');
+    // inputButton = createButton('submit');
+    // inputButton.mousePressed(submitInput);
 
     currentDirs = new Dirs();
+
+    client.addThisPlayer();
 
     keys = {
         up: [UP_ARROW, 87],
@@ -70,8 +96,10 @@ function setup() {
         radius: DEFRADIUS,
         angle: 0,
         missiles: [],
-        health: 100
+        health: 100,
+        name: name
     };
+
 }
 
 function draw() {

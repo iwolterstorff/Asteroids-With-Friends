@@ -44,7 +44,8 @@ io.sockets.on('connection', (socket) => {
             radius: DEFRADIUS,
             angle: 0,
             missiles: [],
-            health: 100
+            health: 100,
+            name: ''
         };
         socket.emit('allPlayers', getAllPlayers());
         socket.broadcast.emit('newPlayer', socket.player);
@@ -82,14 +83,15 @@ io.sockets.on('connection', (socket) => {
     });
 
     setInterval(() => {
-        missileTick(socket.player);
+        gameTick(socket.player);
         socket.emit('allPlayers', getAllPlayers());
     }, 1000 / FRAMERATE);
 
 
 });
 
-function missileTick(player) {
+let time, isDead;
+function gameTick(player) {
     if (player.missiles instanceof Array) {
         player.missiles.forEach((miss, missIndex, missArray) => {
             miss.x += miss.vel * Math.cos(miss.angle);
@@ -98,9 +100,20 @@ function missileTick(player) {
             getAllPlayers().forEach((arrPlayer, playerIndex, playerArray) => {
                 if (arrPlayer !== player) {
                     if (distance(miss.x, miss.y, arrPlayer.x, arrPlayer.y) <= arrPlayer.radius) {
+                        arrPlayer.health -= 10;
                         // TODO: MAKE THE MISSILE BLOW UPPPPP
                         missArray.splice(missIndex, 1);
                     }
+                }
+                if (arrPlayer.health <= 0) {
+                    //io.emit('remove', socket.player.id);
+                    arrPlayer.x = -100000;
+                    arrPlayer.y = -100000;
+                    setTimeout(() => {
+                        arrPlayer.x = WIDTH / 2;
+                        arrPlayer.y = HEIGHT / 2;
+                        arrPlayer.health = 100;
+                    }, 1000);
                 }
             });
 
