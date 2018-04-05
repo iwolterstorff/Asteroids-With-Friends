@@ -1,0 +1,15 @@
+/* Guide to positioning canvas:
+   https://github.com/processing/p5.js/wiki/Positioning-your-canvas
+ */
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: black;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
