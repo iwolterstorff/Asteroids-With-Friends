@@ -68,9 +68,12 @@ function resetInput() {
     canvas.hide();
 }
 
+let bg;
+
 function setup() {
+    bg = loadImage('/backg.png');
     canvas = createCanvas(WIDTH, HEIGHT);
-    background(0);
+    background(bg);
     // canvas.hide();
 
     // inputMessage = createElement('h2', 'What\'s your name?');
@@ -103,7 +106,7 @@ function setup() {
 }
 
 function draw() {
-    background(0);
+    background(bg);
     let allPlayers = world.players;
 
     // Render spaceships with turrets
