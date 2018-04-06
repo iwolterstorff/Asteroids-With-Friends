@@ -73,8 +73,9 @@ let bg;
 function setup() {
     bg = loadImage('/backg.png');
     canvas = createCanvas(WIDTH, HEIGHT);
+    canvas.parent('game-canvas');
     background(bg);
-    // canvas.hide();
+    canvas.hide();
 
     // inputMessage = createElement('h2', 'What\'s your name?');
     // inputBox = createInput('');

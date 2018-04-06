@@ -1,6 +1,5 @@
 /* Guide to positioning canvas:
-   https://github.com/processing/p5.js/wiki/Positioning-your-canvas
- */
+   https://github.com/processing/p5.js/wiki/Positioning-your-canvas */
 
 html, body {
     height: 100%;
@@ -9,7 +8,21 @@ html, body {
 body {
     background-color: black;
     margin: 0;
+    height: 100%;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#login-box {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    /*width: 200px;*/
+    /*height: 150px;*/
+}
+
+#login-box label {
+    color: white;
 }
