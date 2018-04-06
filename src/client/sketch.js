@@ -69,11 +69,14 @@ function resetInput() {
 }
 
 let bg;
+let loginBox;
 
 function setup() {
     bg = loadImage('/backg.png');
     canvas = createCanvas(WIDTH, HEIGHT);
+    // canvas.parent('game-canvas');
     background(bg);
+    loginBox = select('login-box');
     // canvas.hide();
 
     // inputMessage = createElement('h2', 'What\'s your name?');
