@@ -68,11 +68,13 @@ function resetInput() {
     canvas.hide();
 }
 
-let bg;
+let bg, playerImage, turretImage;
 let loginBox;
 
 function setup() {
     bg = loadImage('/backg.png');
+    playerImage = loadImage('/assets/Cannon-hd.png');
+    turretImage = loadImage('/assets/Turret-hd.png');
     canvas = createCanvas(WIDTH, HEIGHT);
     // canvas.parent('game-canvas');
     background(bg);
@@ -119,7 +121,10 @@ function draw() {
             let aPlayer = allPlayers[p];
             push();
             translate(aPlayer.x, aPlayer.y);
-            ellipse(0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            // ellipse(0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            imageMode(CENTER);
+            image(playerImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            imageMode(CORNER);
 
             // Draw health bar
             push();
@@ -132,8 +137,11 @@ function draw() {
             pop();
 
             push();
-            rotate(aPlayer.angle);
-            line(0, 0, aPlayer.radius, 0);
+            rotate(aPlayer.angle + (PI / 2));
+            // line(0, 0, aPlayer.radius, 0);
+            imageMode(CENTER);
+            image(turretImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            imageMode(CORNER);
             pop();
 
             // Pop the matrix transformation
