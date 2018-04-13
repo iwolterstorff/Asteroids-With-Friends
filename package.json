@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp run"
+    "start": "gulp"
   },
   "engines": {
     "node": "8.9.4",
@@ -26,6 +26,7 @@
     "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.23.6",
     "bufferutil": "3.0.3",
+    "child_process": "^1.0.2",
     "express": "^4.16.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",

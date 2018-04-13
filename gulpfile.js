@@ -1,5 +1,7 @@
 const gulp = require('gulp');
 
+const { exec } = require('child_process');
+
 const plugins = require('gulp-load-plugins')();
 // don't think the plugin loader works with hyphenated plugin names... :(
 const fileCache = require('gulp-file-cache');
@@ -7,7 +9,9 @@ const fileCache = require('gulp-file-cache');
 let cache = new fileCache();
 
 // running 'gulp' with no options defaults to running application
-gulp.task('default', ['run']);
+gulp.task('default',
+    [process.env.NODE_ENV === 'production' ? 'production' : 'development']
+    );
 
 gulp.task('lint', () => {
     return gulp.src(['**/*.js', '!node_modules/**/*.js', '!dist/**/*.js', '!src/client/lib/**/*.js'])
@@ -46,13 +50,16 @@ gulp.task('move-client-assets', () => {
 // TODO: Add some kind of testing framework
 gulp.task('test', ['lint']);
 
-gulp.task('run', ['build'], () => {
+gulp.task('development', () => {
     plugins.nodemon({
-        script: './dist/server/server.js',
-        watch:'src',
-        ext: 'html js css',
-        tasks: ['build-client', 'build-server']
+        script: './src/server/server.js',
+        watch: 'src',
+        ext: 'html js css'
     });
+});
+
+gulp.task('production', ['build'], () => {
+    exec('node ./dist/server/server.js');
 });
 
 gulp.task('todo', () => {
