@@ -1,3 +1,5 @@
+'use strict';
+
 // A Player contains the following fields: {id, x, y, radius, angle, missiles(array of Missile)}
 
 
