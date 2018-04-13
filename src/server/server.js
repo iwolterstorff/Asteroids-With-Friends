@@ -4,17 +4,20 @@ const http = require('http').Server(app);
 const path = require('path');
 const io = require('socket.io')(http);
 
+const Victor = require('victor');
+
 const config = require('../../config.json');
 
 const PORT = process.env.PORT || 3000;
 
 const WIDTH = config.width || 1500;
 const HEIGHT = config.height || 700;
+const MARGIN = 40;
 const DEFRADIUS = config.defaultRadius || 40;
 const DEFVEL = config.defaultMissileVelocity || 3;
 
 const FRAMERATE = 60;
-const SHIP_SPEED = 5;
+const SHIP_SPEED = 0.5;
 
 // I intend to add more functionality to this class over time
 let Missile = class Missile {
@@ -24,6 +27,20 @@ let Missile = class Missile {
         this.vel = vel;
         this.angle = angle;
     }
+};
+
+const Player = function(id) {
+    this.id = id;
+    this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
+    // this.pos = newCenter;
+    // this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
+    // this.vel = newZero;
+    // this.vel = { x: 0, y: 0 };
+    this.vel = { x: 0, y: 0 };
+    this.radius = DEFRADIUS;
+    this.angle = 0;
+    this.missiles = [];
+    this.health = 100;
 };
 
 app.use(express.static(path.join(__dirname, "../client")));
@@ -37,16 +54,9 @@ io.sockets.on('connection', (socket) => {
     socket.player = {};
 
     socket.on('newPlayer', () => {
-        socket.player = {
-            id: socket.id,
-            x: WIDTH / 2,
-            y: HEIGHT / 2,
-            radius: DEFRADIUS,
-            angle: 0,
-            missiles: [],
-            health: 100,
-            name: ''
-        };
+        socket.player = new Player(socket.id);
+        socket.player.pos = new Victor(socket.player.pos.x, socket.player.pos.y);
+        socket.player.vel = new Victor(socket.player.vel.x, socket.player.vel.y);
         socket.emit('allPlayers', getAllPlayers());
         socket.broadcast.emit('newPlayer', socket.player);
     });
@@ -54,16 +64,16 @@ io.sockets.on('connection', (socket) => {
     socket.on('playerMove', (data) => {
         // TODO: Implement space-y movement
         if (data.up) {
-            socket.player.y -= SHIP_SPEED;
+            socket.player.vel = socket.player.vel.addY(new Victor(0, -SHIP_SPEED));
         }
         if (data.down) {
-            socket.player.y += SHIP_SPEED;
+            socket.player.vel = socket.player.vel.addY(new Victor(0, SHIP_SPEED));
         }
         if (data.left) {
-            socket.player.x -= SHIP_SPEED;
+            socket.player.vel = socket.player.vel.addX(new Victor(-SHIP_SPEED, 0));
         }
         if (data.right) {
-            socket.player.x += SHIP_SPEED;
+            socket.player.vel = socket.player.vel.addX(new Victor(SHIP_SPEED, 0));
             // console.log('right');
         }
 
@@ -74,7 +84,7 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('playerShoot', () => {
-        socket.player.missiles.push(new Missile(socket.player.x, socket.player.y, DEFVEL, socket.player.angle));
+        socket.player.missiles.push(new Missile(socket.player.pos.x, socket.player.pos.y, DEFVEL, socket.player.angle));
     });
 
     socket.on('disconnect', () => {
@@ -92,6 +102,14 @@ io.sockets.on('connection', (socket) => {
 
 let time, isDead;
 function gameTick(player) {
+    if ('pos' in player) {
+        player.pos = player.pos.add(player.vel);
+        if (player.pos.x < -MARGIN) player.pos.x = WIDTH + MARGIN;
+        if (player.pos.x > WIDTH + MARGIN) player.pos.x = -MARGIN;
+        if (player.pos.y < -MARGIN) player.pos.y = HEIGHT + MARGIN;
+        if (player.pos.y > HEIGHT + MARGIN) player.pos.y = -MARGIN;
+    }
+
     if (player.missiles instanceof Array) {
         player.missiles.forEach((miss, missIndex, missArray) => {
             miss.x += miss.vel * Math.cos(miss.angle);

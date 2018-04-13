@@ -68,13 +68,31 @@ function resetInput() {
     canvas.hide();
 }
 
-let bg, playerImage, turretImage;
+let bg, playerImage, turretImage, missileImage;
 let loginBox;
 
+// const newCenter = createVector(WIDTH / 2, HEIGHT / 2);
+// const newZero = createVector(0, 0);
+
+const Player = function(id) {
+    this.id = id;
+    this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
+    // this.pos = newCenter;
+    // this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
+    // this.vel = newZero;
+    // this.vel = { x: 0, y: 0 };
+    this.vel = { x: 0, y: 0 };
+    this.radius = DEFRADIUS;
+    this.angle = 0;
+    this.missiles = [];
+    this.health = 100;
+};
+
 function setup() {
-    bg = loadImage('/backg.png');
+    bg = loadImage('/assets/backg.png');
     playerImage = loadImage('/assets/Cannon-hd.png');
     turretImage = loadImage('/assets/Turret-hd.png');
+    missileImage = loadImage('/assets/PlayerMissile-hd.png');
     canvas = createCanvas(WIDTH, HEIGHT);
     // canvas.parent('game-canvas');
     background(bg);
@@ -88,6 +106,8 @@ function setup() {
 
     currentDirs = new Dirs();
 
+    player = new Player(client.socket.id);
+
     client.addThisPlayer();
 
     keys = {
@@ -97,16 +117,6 @@ function setup() {
         right: [RIGHT_ARROW, 68]
     };
 
-    player = {
-        id: client.socket.id,
-        x: WIDTH / 2,
-        y: HEIGHT / 2,
-        radius: DEFRADIUS,
-        angle: 0,
-        missiles: [],
-        health: 100,
-        name: name
-    };
 
 }
 
@@ -120,7 +130,7 @@ function draw() {
             fill(255);
             let aPlayer = allPlayers[p];
             push();
-            translate(aPlayer.x, aPlayer.y);
+            translate(aPlayer.pos.x, aPlayer.pos.y);
             // ellipse(0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
             imageMode(CENTER);
             image(playerImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
@@ -152,8 +162,9 @@ function draw() {
                 push();
                 translate(item.x, item.y);
                 rotate(item.angle + (PI / 2));
-                fill(192, 192, 192);
-                triangle(-10, 30, 10, 30, 0, 0);
+                // fill(192, 192, 192);
+                // triangle(-10, 30, 10, 30, 0, 0);
+                image(missileImage, 0, 0);
                 pop();
             });
 
@@ -180,7 +191,7 @@ function draw() {
 
     // Update turret angle
     // I learned this from https://stackoverflow.com/questions/2676719/calculating-the-angle-between-the-line-defined-by-two-points
-    let angle = atan2(mouseY - player.y, mouseX - player.x);
+    let angle = atan2(mouseY - player.pos.y, mouseX - player.pos.x);
     client.sendGunAngle(angle);
 
 }
