@@ -1,5 +1,3 @@
-'use strict';
-
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -44,6 +42,7 @@ const Player = function(id) {
     this.missiles = [];
     this.health = 100;
     this.visible = true;
+    this.score = 0;
 };
 
 app.use(express.static(path.join(__dirname, "../client")));

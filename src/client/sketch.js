@@ -1,5 +1,3 @@
-'use strict';
-
 // A Player contains the following fields: {id, x, y, radius, angle, missiles(array of Missile)}
 
 
@@ -79,16 +77,13 @@ let loginBox;
 const Player = function(id) {
     this.id = id;
     this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
-    // this.pos = newCenter;
-    // this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
-    // this.vel = newZero;
-    // this.vel = { x: 0, y: 0 };
     this.vel = { x: 0, y: 0 };
     this.radius = DEFRADIUS;
     this.angle = 0;
     this.missiles = [];
     this.health = 100;
     this.visible = true;
+    this.score = 0;
 };
 
 function setup() {

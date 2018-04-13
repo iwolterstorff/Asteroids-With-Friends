@@ -1,5 +1,3 @@
-'use strict';
-
 // This file is basically an enumeration of everything a client can do (that would be broadcast)
 
 let client = {};

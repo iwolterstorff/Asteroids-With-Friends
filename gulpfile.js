@@ -4,9 +4,9 @@ const { exec } = require('child_process');
 
 const plugins = require('gulp-load-plugins')();
 // don't think the plugin loader works with hyphenated plugin names... :(
-const fileCache = require('gulp-file-cache');
+const FileCache = require('gulp-file-cache');
 
-let cache = new fileCache();
+let cache = new FileCache();
 
 // running 'gulp' with no options defaults to running application
 gulp.task('default',
