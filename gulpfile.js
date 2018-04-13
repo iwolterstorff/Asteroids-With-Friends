@@ -48,9 +48,9 @@ gulp.task('move-client-assets', () => {
 });
 
 // TODO: Add some kind of testing framework
-gulp.task('test', ['lint']);
+gulp.task('test', []);
 
-gulp.task('development', () => {
+gulp.task('development', ['lint'], () => {
     plugins.nodemon({
         script: './src/server/server.js',
         watch: 'src',
