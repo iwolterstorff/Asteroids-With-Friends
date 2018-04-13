@@ -88,6 +88,7 @@ const Player = function(id) {
     this.angle = 0;
     this.missiles = [];
     this.health = 100;
+    this.visible = true;
 };
 
 function setup() {
@@ -135,24 +136,30 @@ function draw() {
             translate(aPlayer.pos.x, aPlayer.pos.y);
             // ellipse(0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
             imageMode(CENTER);
-            image(playerImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            if (aPlayer.visible) {
+                image(playerImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            }
             imageMode(CORNER);
 
             // Draw health bar
-            push();
-            strokeWeight(4);
-            stroke(240, 0, 1);
-            line(-aPlayer.radius, aPlayer.radius + 5, aPlayer.radius, aPlayer.radius + 5);
+            if (aPlayer.visible) {
+                push();
+                strokeWeight(4);
+                stroke(240, 0, 1);
+                line(-aPlayer.radius, aPlayer.radius + 5, aPlayer.radius, aPlayer.radius + 5);
 
-            stroke(34, 255, 0);
-            line(-aPlayer.radius, aPlayer.radius + 5, map(aPlayer.health, 0, 100, -aPlayer.radius, aPlayer.radius), aPlayer.radius + 5);
-            pop();
+                stroke(34, 255, 0);
+                line(-aPlayer.radius, aPlayer.radius + 5, map(aPlayer.health, 0, 100, -aPlayer.radius, aPlayer.radius), aPlayer.radius + 5);
+                pop();
+            }
 
             push();
             rotate(aPlayer.angle + (PI / 2));
             // line(0, 0, aPlayer.radius, 0);
             imageMode(CENTER);
-            image(turretImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            if (aPlayer.visible) {
+                image(turretImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+            }
             imageMode(CORNER);
             pop();
 

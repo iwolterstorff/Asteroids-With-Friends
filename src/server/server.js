@@ -43,6 +43,7 @@ const Player = function(id) {
     this.angle = 0;
     this.missiles = [];
     this.health = 100;
+    this.visible = true;
 };
 
 app.use(express.static(path.join(__dirname, "../client")));
@@ -119,7 +120,7 @@ function gameTick(player) {
 
             getAllPlayers().forEach((arrPlayer, playerIndex, playerArray) => {
                 if (arrPlayer !== player) {
-                    if (distance(miss.x, miss.y, arrPlayer.x, arrPlayer.y) <= arrPlayer.radius) {
+                    if (distance(miss.x, miss.y, arrPlayer.pos.x, arrPlayer.pos.y) <= arrPlayer.radius) {
                         arrPlayer.health -= 10;
                         // TODO: MAKE THE MISSILE BLOW UPPPPP
                         missArray.splice(missIndex, 1);
@@ -127,12 +128,12 @@ function gameTick(player) {
                 }
                 if (arrPlayer.health <= 0) {
                     //io.emit('remove', socket.player.id);
-                    arrPlayer.x = -100000;
-                    arrPlayer.y = -100000;
+                    arrPlayer.visible = false;
                     setTimeout(() => {
-                        arrPlayer.x = WIDTH / 2;
-                        arrPlayer.y = HEIGHT / 2;
+                        arrPlayer.pos.x = WIDTH / 2;
+                        arrPlayer.pos.y = HEIGHT / 2;
                         arrPlayer.health = 100;
+                        arrPlayer.visible = true;
                     }, 1000);
                 }
             });
