@@ -14,7 +14,7 @@ const WIDTH = config.width || 1500;
 const HEIGHT = config.height || 700;
 const MARGIN = 40;
 const DEFRADIUS = config.defaultRadius || 40;
-const DEFVEL = config.defaultMissileVelocity || 3;
+const DEFVEL = config.defaultMissileVelocity || 6;
 
 const FRAMERATE = 60;
 const SHIP_SPEED = 0.5;

@@ -174,7 +174,7 @@ function draw() {
                 image(turretImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
                 console.log(aPlayer.color);
                 // tint(aPlayer.color, 207);
-                tint(color(aPlayer.color), 207);
+                tint(color(aPlayer.color), 190);
                 image(surroundImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
                 noTint();
             }
