@@ -29,8 +29,10 @@ let Missile = class Missile {
     }
 };
 
-const Player = function(id) {
+const Player = function(id, name, color) {
     this.id = id;
+    this.name = name;
+    this.color = color;
     this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
     // this.pos = newCenter;
     // this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
@@ -55,8 +57,9 @@ io.sockets.on('connection', (socket) => {
     console.log(`Socket connected: ${socket.id}`);
     socket.player = {};
 
-    socket.on('newPlayer', () => {
-        socket.player = new Player(socket.id);
+    socket.on('newPlayer', (obj) => {
+        socket.player = new Player(socket.id, obj.name, obj.color);
+        console.log(socket.player.name + ' ' + socket.player.color);
         socket.player.pos = new Victor(socket.player.pos.x, socket.player.pos.y);
         socket.player.vel = new Victor(socket.player.vel.x, socket.player.vel.y);
         socket.emit('allPlayers', getAllPlayers());
@@ -65,18 +68,20 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('playerMove', (data) => {
         // TODO: Implement space-y movement
-        if (data.up) {
-            socket.player.vel = socket.player.vel.addY(new Victor(0, -SHIP_SPEED));
-        }
-        if (data.down) {
-            socket.player.vel = socket.player.vel.addY(new Victor(0, SHIP_SPEED));
-        }
-        if (data.left) {
-            socket.player.vel = socket.player.vel.addX(new Victor(-SHIP_SPEED, 0));
-        }
-        if (data.right) {
-            socket.player.vel = socket.player.vel.addX(new Victor(SHIP_SPEED, 0));
-            // console.log('right');
+        if (socket.player.vel) {
+            if (data.up) {
+                socket.player.vel = socket.player.vel.addY(new Victor(0, -SHIP_SPEED));
+            }
+            if (data.down) {
+                socket.player.vel = socket.player.vel.addY(new Victor(0, SHIP_SPEED));
+            }
+            if (data.left) {
+                socket.player.vel = socket.player.vel.addX(new Victor(-SHIP_SPEED, 0));
+            }
+            if (data.right) {
+                socket.player.vel = socket.player.vel.addX(new Victor(SHIP_SPEED, 0));
+                // console.log('right');
+            }
         }
 
     });
@@ -86,7 +91,9 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('playerShoot', () => {
-        socket.player.missiles.push(new Missile(socket.player.pos.x, socket.player.pos.y, DEFVEL, socket.player.angle));
+        if (socket.player.missiles) {
+            socket.player.missiles.push(new Missile(socket.player.pos.x, socket.player.pos.y, DEFVEL, socket.player.angle));
+        }
     });
 
     socket.on('disconnect', () => {
@@ -118,14 +125,16 @@ function gameTick(player) {
             miss.y += miss.vel * Math.sin(miss.angle);
 
             getAllPlayers().forEach((arrPlayer, playerIndex, playerArray) => {
-                if (arrPlayer !== player) {
-                    if (distance(miss.x, miss.y, arrPlayer.pos.x, arrPlayer.pos.y) <= arrPlayer.radius) {
+                if (arrPlayer && arrPlayer !== player) {
+                    if (arrPlayer.pos.x &&
+                        arrPlayer.pos.y &&
+                        distance(miss.x, miss.y, arrPlayer.pos.x, arrPlayer.pos.y) <= arrPlayer.radius) {
                         arrPlayer.health -= 10;
                         // TODO: MAKE THE MISSILE BLOW UPPPPP
                         missArray.splice(missIndex, 1);
                     }
                 }
-                if (arrPlayer.health <= 0) {
+                if (arrPlayer && arrPlayer.health <= 0) {
                     //io.emit('remove', socket.player.id);
                     arrPlayer.visible = false;
                     setTimeout(() => {

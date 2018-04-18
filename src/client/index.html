@@ -15,19 +15,19 @@
 
   <body>
     <div id="game-canvas"></div>
-    <!--<div id="login-box">-->
-      <!--<form>-->
-        <!--<label>-->
-          <!--Name:-->
-          <!--<input type="text" name="player-name">-->
-        <!--</label><br><br>-->
-        <!--<label>-->
-          <!--Color:-->
-          <!--<input type="color" name="player-color" value="#ff0000">-->
-        <!--</label><br><br>-->
-        <!--<input type="submit" value="Enter game">-->
-      <!--</form>-->
-    <!--</div>-->
+    <div id="login-box">
+      <form>
+        <label>
+          Name:
+          <input type="text" name="player-name" id="player-name">
+        </label><br><br>
+        <label>
+          Color:
+          <input type="color" name="player-color" id="player-color" value="#ff0000">
+        </label><br><br>
+        <input type="button" id="submit-button" value="Enter game" onclick="submitInput()">
+      </form>
+    </div>
 
 
   </body>

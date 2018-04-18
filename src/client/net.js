@@ -6,8 +6,11 @@ client.socket = io.connect();
 
 ///// SENDING DATA //////////////////
 
-client.addThisPlayer = () => {
-    client.socket.emit('newPlayer');
+client.addThisPlayer = (name, color) => {
+    client.socket.emit('newPlayer', {
+        name: name,
+        color: color
+    });
 };
 
 client.sendMovement = (dirs) => {

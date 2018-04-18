@@ -26,7 +26,7 @@ let world = {
     players: {}
 };
 
-let player, canvas, inputMessage, inputBox, inputButton;
+let player, canvas, inputMessage, nameBox, colorInput, submitButton;
 
 let name;
 
@@ -51,31 +51,30 @@ world.removePlayer = (id) => {
 // }
 
 function submitInput() {
-    name = inputBox.value();
-    player.name = name;
-    inputMessage.hide();
-    inputBox.hide();
-    inputButton.hide();
-    client.addThisPlayer();
-    canvas.show();
+    name = nameBox.value();
+    loginBox.hide();
+    player = new Player(client.socket.id, nameBox.value(), colorInput.value());
+    client.addThisPlayer(nameBox.value(), colorInput.value());
 }
 
 function resetInput() {
-    inputBox.value('');
+    nameBox.value('');
     inputMessage.show();
-    inputBox.show();
-    inputButton.show();
+    nameBox.show();
+    submitButton.show();
     canvas.hide();
 }
 
-let bg, playerImage, turretImage, missileImage;
+let bg, playerImage, turretImage, surroundImage, missileImage;
 let loginBox;
 
 // const newCenter = createVector(WIDTH / 2, HEIGHT / 2);
 // const newZero = createVector(0, 0);
 
-const Player = function(id) {
+const Player = function(id, name, color) {
     this.id = id;
+    this.name = name;
+    this.color = color;
     this.pos = { x: WIDTH / 2, y: HEIGHT / 2 };
     this.vel = { x: 0, y: 0 };
     this.radius = DEFRADIUS;
@@ -86,27 +85,35 @@ const Player = function(id) {
     this.score = 0;
 };
 
+
 function setup() {
     bg = loadImage('/assets/backg.png');
     playerImage = loadImage('/assets/Cannon-hd.png');
-    turretImage = loadImage('/assets/Turret-hd.png');
+    // turretImage = loadImage('/assets/Turret-hd.png');
+    surroundImage = loadImage('/assets/surround-desat.png');
+    turretImage = loadImage('/assets/turret.png');
     missileImage = loadImage('/assets/PlayerMissile-hd.png');
     canvas = createCanvas(WIDTH, HEIGHT);
-    // canvas.parent('game-canvas');
+    canvas.parent('game-canvas');
     background(bg);
-    loginBox = select('login-box');
+    loginBox = select('#login-box');
+    nameBox = select('#player-name');
+    colorInput = select('#player-color');
+    submitButton = select('#submit-button');
+
     // canvas.hide();
 
     // inputMessage = createElement('h2', 'What\'s your name?');
-    // inputBox = createInput('');
-    // inputButton = createButton('submit');
-    // inputButton.mousePressed(submitInput);
+    // nameBox = createInput('');
+    // submitButton = createButton('submit');
+    // submitButton.mousePressed(submitInput);
 
     currentDirs = new Dirs();
 
-    player = new Player(client.socket.id);
+    // dummy player
+    player = new Player(client.socket.id, null, null);
 
-    client.addThisPlayer();
+    // client.addThisPlayer();
 
     keys = {
         up: [UP_ARROW, 87],
@@ -146,7 +153,18 @@ function draw() {
                 stroke(34, 255, 0);
                 line(-aPlayer.radius, aPlayer.radius + 5, map(aPlayer.health, 0, 100, -aPlayer.radius, aPlayer.radius), aPlayer.radius + 5);
                 pop();
+
+                // draw player name
+                push();
+                textFont('Raleway');
+                textAlign(CENTER, CENTER);
+                fill(255, 215, 0);
+                textSize(15);
+                textStyle(BOLD);
+                text(aPlayer.name, 0, aPlayer.radius + 17);
+                pop();
             }
+
 
             push();
             rotate(aPlayer.angle + (PI / 2));
@@ -154,6 +172,11 @@ function draw() {
             imageMode(CENTER);
             if (aPlayer.visible) {
                 image(turretImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+                console.log(aPlayer.color);
+                // tint(aPlayer.color, 207);
+                tint(color(aPlayer.color), 207);
+                image(surroundImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
+                noTint();
             }
             imageMode(CORNER);
             pop();
