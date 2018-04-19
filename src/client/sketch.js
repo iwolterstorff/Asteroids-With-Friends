@@ -50,11 +50,17 @@ world.removePlayer = (id) => {
 //     DEFRADIUS = config.defaultRadius;
 // }
 
+let currColor = '#ff0000';
+
+function updateCurrColor(jscolor) {
+    currColor = '#' + (jscolor.toString() || 'ff0000');
+}
+
 function submitInput() {
     name = nameBox.value();
     loginBox.hide();
-    player = new Player(client.socket.id, nameBox.value(), colorInput.value());
-    client.addThisPlayer(nameBox.value(), colorInput.value());
+    player = new Player(client.socket.id, nameBox.value(), currColor);
+    client.addThisPlayer(nameBox.value(), currColor);
 }
 
 function resetInput() {
@@ -92,7 +98,7 @@ function setup() {
     // turretImage = loadImage('/assets/Turret-hd.png');
     surroundImage = loadImage('/assets/surround-desat.png');
     turretImage = loadImage('/assets/turret.png');
-    missileImage = loadImage('/assets/PlayerMissile-hd.png');
+    missileImage = loadImage('/assets/missile-desat.png');
     canvas = createCanvas(WIDTH, HEIGHT);
     canvas.parent('game-canvas');
     background(bg);
@@ -134,6 +140,36 @@ function draw() {
         if (allPlayers.hasOwnProperty(p)) {
             fill(255);
             let aPlayer = allPlayers[p];
+            if (aPlayer.id === player.id) {
+                player = aPlayer;
+
+                push();
+                textFont('Raleway');
+                fill(255, 215, 0);
+                text('Your score:', 10, 10);
+                text(aPlayer.score, 10, 20);
+                pop();
+
+                // "glow" highlight effect
+                // adapted this snippet from https://stackoverflow.com/questions/20959489/how-to-draw-a-glowing-halo-around-elements-using-processing-2-0-java
+                // let glowRadius = 100.0 + 15 * sin(frameCount/(3 * frameRate()) * TWO_PI);
+                let glowRadius = 100.0;
+                strokeWeight(2);
+                fill(255, 0);
+                push();
+                translate(aPlayer.pos.x, aPlayer.pos.y);
+                for (let rad = 0; rad < glowRadius; rad += 1) {
+                    // stroke(255.0, 215.0, 0.0, 255.0 * (1 - rad / glowRadius));
+                    if (aPlayer.health > 25) {
+                        stroke(34.0, 255.0, 0.0, 255.0 * (1 - rad / glowRadius));
+                    } else {
+                        stroke(240.0, 0.0, 1.1, 255.0 * (1 - rad / glowRadius));
+                    }
+                    ellipse(0, 0, rad, rad);
+                }
+                pop();
+                // console.log(aPlayer.name);
+            }
             push();
             translate(aPlayer.pos.x, aPlayer.pos.y);
             // ellipse(0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
@@ -172,7 +208,7 @@ function draw() {
             imageMode(CENTER);
             if (aPlayer.visible) {
                 image(turretImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
-                console.log(aPlayer.color);
+                // console.log(aPlayer.color);
                 // tint(aPlayer.color, 207);
                 tint(color(aPlayer.color), 190);
                 image(surroundImage, 0, 0, aPlayer.radius * 2, aPlayer.radius * 2);
@@ -191,13 +227,13 @@ function draw() {
                 rotate(item.angle + (PI / 2));
                 // fill(192, 192, 192);
                 // triangle(-10, 30, 10, 30, 0, 0);
+                tint(color(aPlayer.color), 190);
                 image(missileImage, 0, 0);
+                noTint();
                 pop();
             });
 
-            if (aPlayer.id === player.id) {
-                player = aPlayer;
-            }
+
         }
     }
 
@@ -225,4 +261,17 @@ function draw() {
 
 function mousePressed() {
     client.shoot();
+}
+
+function comparePlayers(p1, p2) {
+    if (!p1.score || !p2.score) return 0;
+    let score1 = p1.score;
+    let score2 = p2.score;
+    if (score1 > score2) {
+        return -1;
+    } else if (score2 > score1) {
+        return 1;
+    } else {
+        return 0;
+    }
 }

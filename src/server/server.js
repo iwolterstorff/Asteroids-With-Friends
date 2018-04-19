@@ -126,10 +126,12 @@ function gameTick(player) {
 
             getAllPlayers().forEach((arrPlayer, playerIndex, playerArray) => {
                 if (arrPlayer && arrPlayer !== player) {
-                    if (arrPlayer.pos.x &&
+                    if (arrPlayer.pos &&
+                        arrPlayer.pos.x &&
                         arrPlayer.pos.y &&
                         distance(miss.x, miss.y, arrPlayer.pos.x, arrPlayer.pos.y) <= arrPlayer.radius) {
                         arrPlayer.health -= 10;
+                        player.score += 25;
                         // TODO: MAKE THE MISSILE BLOW UPPPPP
                         missArray.splice(missIndex, 1);
                     }
