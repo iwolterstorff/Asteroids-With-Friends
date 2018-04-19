@@ -201,7 +201,7 @@ function getAllPlayers() {
 
 // given an object containing only Players, returns a string representing these players and sorted by score
 function formattedLeaderboardString(players) {
-    let CHAR_WIDTH = 20;
+    let CHAR_WIDTH = 30;
     let arrPlayers = Object.values(players);
     arrPlayers.sort(comparePlayers);
     let resultString = '\nLeaderboard:\n\n';
