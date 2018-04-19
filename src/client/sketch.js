@@ -246,6 +246,7 @@ function draw() {
             textFont('Raleway');
             textSize(17);
             textAlign(CENTER);
+            textStyle(NORMAL);
             text(leaderboardString, WIDTH - rectWidth, 0, rectWidth, rectHeight);
             pop();
 

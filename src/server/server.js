@@ -69,18 +69,22 @@ io.sockets.on('connection', (socket) => {
     socket.on('playerMove', (data) => {
         // TODO: Implement space-y movement
         if (socket.player.vel) {
-            if (data.up) {
-                socket.player.vel = socket.player.vel.addY(new Victor(0, -SHIP_SPEED));
-            }
-            if (data.down) {
-                socket.player.vel = socket.player.vel.addY(new Victor(0, SHIP_SPEED));
-            }
-            if (data.left) {
-                socket.player.vel = socket.player.vel.addX(new Victor(-SHIP_SPEED, 0));
-            }
-            if (data.right) {
-                socket.player.vel = socket.player.vel.addX(new Victor(SHIP_SPEED, 0));
-                // console.log('right');
+            if (socket.player.vel.length() <= 25.0) {
+                if (data.up) {
+                    socket.player.vel = socket.player.vel.addY(new Victor(0, -SHIP_SPEED));
+                }
+                if (data.down) {
+                    socket.player.vel = socket.player.vel.addY(new Victor(0, SHIP_SPEED));
+                }
+                if (data.left) {
+                    socket.player.vel = socket.player.vel.addX(new Victor(-SHIP_SPEED, 0));
+                }
+                if (data.right) {
+                    socket.player.vel = socket.player.vel.addX(new Victor(SHIP_SPEED, 0));
+                    // console.log('right');
+                }
+            } else {
+                socket.player.vel = socket.player.vel.multiply(new Victor(0.9, 0.9));
             }
         }
 
@@ -119,6 +123,28 @@ function gameTick(player) {
         if (player.pos.y < -MARGIN) player.pos.y = HEIGHT + MARGIN;
         if (player.pos.y > HEIGHT + MARGIN) player.pos.y = -MARGIN;
     }
+
+    if (player.vel) console.log(player.vel.length());
+
+    // I hope to get this physics working someday
+
+    // getAllPlayers().forEach(p1 => {
+    //    if (p1.id !== player.id) {
+    //        if (p1.pos && player.pos && distance(p1.pos.x, p1.pos.y, player.pos.x, player.pos.y) <= DEFRADIUS) {
+    //            let p2 = player;
+    //            let newV1 = p1.vel.subtract(p2.vel).dot(p1.pos.subtract(p2.pos)) /
+    //                p1.pos.subtract(p2.pos).dot(p1.pos.subtract(p2.pos));
+    //            newV1 = new Victor(newV1, newV1).multiply(p1.pos.subtract(p2.pos));
+    //            newV1 = p1.vel.subtract(newV1);
+    //            let newV2 = p2.vel.subtract(p1.vel).dot(p2.pos.subtract(p1.pos)) /
+    //                p2.pos.subtract(p1.pos).dot(p2.pos.subtract(p1.pos));
+    //            newV2 = new Victor(newV2, newV2).multiply(p2.pos.subtract(p1.pos));
+    //            newV2 = p2.vel.subtract(newV2);
+    //            p1.vel = newV1;
+    //            player.vel = newV2;
+    //        }
+    //    }
+    // });
 
     if (player.missiles instanceof Array) {
         player.missiles.forEach((miss, missIndex, missArray) => {
