@@ -104,6 +104,7 @@ io.sockets.on('connection', (socket) => {
     setInterval(() => {
         gameTick(socket.player);
         socket.emit('allPlayers', getAllPlayers());
+        socket.emit('leaderboard', formattedLeaderboardString(getAllPlayers()));
     }, 1000 / FRAMERATE);
 
 
@@ -170,6 +171,36 @@ function getAllPlayers() {
         if (player) players.push(player);
     });
     return players;
+}
+
+// given an object containing only Players, returns a string representing these players and sorted by score
+function formattedLeaderboardString(players) {
+    let CHAR_WIDTH = 20;
+    let arrPlayers = Object.values(players);
+    arrPlayers.sort(comparePlayers);
+    let resultString = '\nLeaderboard:\n\n';
+    arrPlayers.forEach(player => {
+        let playerName = player.name || '';
+        let playerScore = (!isNaN(player.score) ? player.score.toString() : '');
+        let padding = CHAR_WIDTH - playerName.length - playerScore.length;
+        let thisLine = playerName.padEnd(padding) + playerScore + '\n';
+        resultString += thisLine;
+    });
+    return resultString;
+}
+
+function comparePlayers(p1, p2) {
+    if (!p1.score) p1.score = 0;
+    if (!p2.score) p2.score = 0;
+    let score1 = p1.score;
+    let score2 = p2.score;
+    if (score1 > score2) {
+        return -1;
+    } else if (score2 > score1) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 

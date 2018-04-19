@@ -73,6 +73,7 @@ function resetInput() {
 
 let bg, playerImage, turretImage, surroundImage, missileImage;
 let loginBox;
+let leaderboardString = '';
 
 // const newCenter = createVector(WIDTH / 2, HEIGHT / 2);
 // const newZero = createVector(0, 0);
@@ -145,9 +146,10 @@ function draw() {
 
                 push();
                 textFont('Raleway');
+                textSize(25);
                 fill(255, 215, 0);
-                text('Your score:', 10, 10);
-                text(aPlayer.score, 10, 20);
+                text('Your score:\n' + aPlayer.score, 10, 20);
+                // text(aPlayer.score, 10, 20);
                 pop();
 
                 // "glow" highlight effect
@@ -233,6 +235,20 @@ function draw() {
                 pop();
             });
 
+            push();
+            fill(255, 0);
+            stroke(255, 215, 0);
+            strokeWeight(2);
+            let rectWidth = textWidth(leaderboardString) + 10;
+            let rectHeight = 35 * (Object.keys(allPlayers).length + 2) + 10;
+            console.log(rectHeight);
+            rect(WIDTH - rectWidth, 0, rectWidth, rectHeight, 20);
+            textFont('Raleway');
+            textSize(17);
+            textAlign(CENTER);
+            text(leaderboardString, WIDTH - rectWidth, 0, rectWidth, rectHeight);
+            pop();
+
 
         }
     }
@@ -263,15 +279,7 @@ function mousePressed() {
     client.shoot();
 }
 
-function comparePlayers(p1, p2) {
-    if (!p1.score || !p2.score) return 0;
-    let score1 = p1.score;
-    let score2 = p2.score;
-    if (score1 > score2) {
-        return -1;
-    } else if (score2 > score1) {
-        return 1;
-    } else {
-        return 0;
-    }
+function updateLeaderboard(str) {
+    leaderboardString = str;
 }
+

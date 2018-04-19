@@ -35,6 +35,10 @@ client.socket.on('newPlayer', (data) => {
     world.updatePlayer(data);
 });
 
+client.socket.on('leaderboard', (data) => {
+    updateLeaderboard(data);
+});
+
 client.socket.on('allPlayers', (data) => {
    // for (let playerIndex = 0; playerIndex < data.length; playerIndex += 1) {
    //     world.updatePlayer(data[playerIndex]);
