@@ -239,7 +239,7 @@ function draw() {
             fill(255, 0);
             stroke(255, 215, 0);
             strokeWeight(2);
-            let rectWidth = textWidth(leaderboardString) + 10;
+            let rectWidth = textWidth(leaderboardString);
             let rectHeight = 35 * (Object.keys(allPlayers).length + 2) + 10;
             console.log(rectHeight);
             rect(WIDTH - rectWidth, 0, rectWidth, rectHeight, 20);
