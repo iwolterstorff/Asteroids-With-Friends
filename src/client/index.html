@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/lib/jscolor-2.0.4/jscolor.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/victor/1.1.0/victor.min.js"></script>
@@ -23,7 +24,7 @@
         </label><br><br>
         <label>
           Color:
-          <input type="color" name="player-color" id="player-color" value="#ff0000">
+          <input class="jscolor" name="player-color" id="player-color" value="#ff0000">
         </label><br><br>
         <input type="button" id="submit-button" value="Enter game" onclick="submitInput()">
       </form>
